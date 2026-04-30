@@ -11,9 +11,11 @@ const errorHandler = require('./src/middlewares/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', router);
@@ -25,9 +27,16 @@ app.get('/', (req, res) => {
   });
 });
 
+
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-  console.log(`Documentação Swagger em http://localhost:${PORT}/api-docs`);
-});
+
+module.exports = app;
+
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+    console.log(`Documentação Swagger em http://localhost:${PORT}/api-docs`);
+  });
+}
