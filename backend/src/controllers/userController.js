@@ -57,4 +57,28 @@ async function deleteUser(req, res, next) {
   }
 }
 
-module.exports = { listUsers, getUser, updateUser, deleteUser };
+async function createUser(req, res, next) {
+  try {
+    const { name, email, password, role } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Campos obrigatórios faltando" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const id = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: role || "user",
+    });
+
+    const user = await User.findById(id);
+
+    res.status(201).json(user);
+  } catch (err) {
+    next(err);
+  }
+}
+module.exports = { listUsers, getUser, updateUser, deleteUser, createUser };

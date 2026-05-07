@@ -54,7 +54,7 @@ export function useApi() {
     }
   }
 
- 
+
 
   async function register(userData) {
     return request("/auth/register", "POST", userData);
@@ -78,13 +78,23 @@ export function useApi() {
     localStorage.removeItem("token");
   }
 
+ 
 
   async function getUsers(page = 1, limit = 10) {
-    return request(`/users?page=${page}&limit=${limit}`);
+    const data = await request(`/users?page=${page}&limit=${limit}`);
+    return data?.data ?? data;
   }
+
   async function createUser(userData) {
-  return request("/users", "POST", userData);
-}
+    const payload = {
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      role: userData.role || "user",
+    };
+
+    return request("/users", "POST", payload);
+  }
 
   async function getUserById(id) {
     return request(`/users/${id}`);
@@ -98,9 +108,11 @@ export function useApi() {
     return request(`/users/${id}`, "DELETE");
   }
 
+ 
 
   async function getAuthors(page = 1, limit = 10) {
-    return request(`/authors?page=${page}&limit=${limit}`);
+    const data = await request(`/authors?page=${page}&limit=${limit}`);
+    return data?.data ?? data;
   }
 
   async function getAuthorById(id) {
@@ -120,8 +132,10 @@ export function useApi() {
   }
 
 
+
   async function getCategories(page = 1, limit = 10) {
-    return request(`/categories?page=${page}&limit=${limit}`);
+    const data = await request(`/categories?page=${page}&limit=${limit}`);
+    return data?.data ?? data;
   }
 
   async function getCategoryById(id) {
@@ -141,11 +155,10 @@ export function useApi() {
   }
 
 
-
-  async function getBooks(page = 1, limit = 10) {
-    return request(`/books?page=${page}&limit=${limit}`);
-  }
-
+async function getBooks(page = 1, limit = 10) {
+  const data = await request(`/books?page=${page}&limit=${limit}`);
+  return data?.data ?? data;
+}
   async function getBookById(id) {
     return request(`/books/${id}`);
   }
@@ -163,8 +176,10 @@ export function useApi() {
   }
 
 
+
   async function getLoans(page = 1, limit = 10) {
-    return request(`/loans?page=${page}&limit=${limit}`);
+    const data = await request(`/loans?page=${page}&limit=${limit}`);
+    return data?.data ?? data;
   }
 
   async function getLoanById(id) {
@@ -183,6 +198,8 @@ export function useApi() {
     return request(`/loans/${id}`, "DELETE");
   }
 
+
+
   return {
     loading,
     error,
@@ -192,20 +209,17 @@ export function useApi() {
     profile,
     logout,
 
- 
     getUsers,
     getUserById,
     updateUser,
     deleteUser,
     createUser,
 
- 
     getAuthors,
     getAuthorById,
     createAuthor,
     updateAuthor,
     deleteAuthor,
-
 
     getCategories,
     getCategoryById,
@@ -219,7 +233,6 @@ export function useApi() {
     updateBook,
     deleteBook,
 
-  
     getLoans,
     getLoanById,
     createLoan,

@@ -1,4 +1,4 @@
-// tests/integration/authors.test.js
+
 import { describe, it, expect, beforeEach, afterAll } from 'vitest';
 import request from 'supertest';
 import app from '../../server.js';

@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { listUsers, getUser, updateUser, deleteUser } = require('../controllers/userController');
+const { listUsers, getUser, updateUser, deleteUser, createUser } =
+  require('../controllers/userController');
 const authenticate = require('../middlewares/auth');
 const authorize = require('../middlewares/authorize');
 
@@ -105,5 +106,34 @@ router.put('/:id', authenticate, authorize('admin'), updateUser);
  *         description: Usuário não encontrado
  */
 router.delete('/:id', authenticate, authorize('admin'), deleteUser);
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Criar usuário
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name: { type: string }
+ *               email: { type: string }
+ *               password: { type: string }
+ *               role: { type: string, enum: [admin, user] }
+ *     responses:
+ *       201:
+ *         description: Usuário criado
+ */
+router.post('/', authenticate, authorize('admin'), createUser);
 
 module.exports = router;
